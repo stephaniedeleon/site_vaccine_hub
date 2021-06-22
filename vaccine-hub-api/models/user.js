@@ -12,6 +12,8 @@ class User {
         // if there is a match, return the user
 
         // if any of this goes wrong, thrown an error
+
+        throw new UnauthorizedError("Invalis email/password combo")
     }
 
     static async register(credentials) {
