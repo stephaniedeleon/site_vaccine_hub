@@ -8,6 +8,7 @@ const { NotFoundError } = require("./utils/errors")
 
 const app = express();
 
+
 // enables cross-origin resource sharing for all origins
 app.use(cors());
 // parce incoming equest bodies with JSON payloads
@@ -15,8 +16,10 @@ app.use(express.json());
 // log request info
 app.use(morgan("tiny"));
 
+
 // attached the auth routes
 app.use("/auth", authRoutes);
+
 
 // Handle all 404 errors that weren't matched by a route
 app.use((req, res, next) => {
