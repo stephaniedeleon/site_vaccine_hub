@@ -2,6 +2,7 @@ const express = require("express");
 const morgan = require("morgan");
 const cors = require("cors");
 const { PORT } = require("./config");
+const authRoutes = require("./routes/auth")
 
 const { NotFoundError } = require("./utils/errors")
 
@@ -14,6 +15,8 @@ app.use(express.json());
 // log request info
 app.use(morgan("tiny"));
 
+// attached the auth routes
+app.use("/auth", authRoutes);
 
 // Handle all 404 errors that weren't matched by a route
 app.use((req, res, next) => {
