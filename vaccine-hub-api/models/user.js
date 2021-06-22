@@ -5,21 +5,53 @@ const { UnauthorizedError, BadRequestError } = require("../utils/errors")
 
 class User {
 
+    //prevents the password from showing up in JSON
+    static async makePublicUser(user) {
+        return {
+            id: user.id,
+            email: user.email,
+            firstName: user.first_name,
+            lastName: user.last_name,
+            location: user.location,
+            date: user.date
+        }
+    }
+
+    //login
     static async login(credentials) {
+
         //user should submit their email and password
         //if any of these fields are missing, throw an error
+        const requiredFields = ["email", "password"];
+        requiredFields.forEach(field => {
+            if(!credentials.hasOwnProperty(field)) {
+                throw new BadRequestError(`Missing ${field} in request body.`);
+            }
+        });
 
         // lookup the user in db by email
+        const user = await User.fetchUserByEmail(credentials.email);
         // if a user id found compare the submitted password
         // with password in db
         // if there is a match, return the user
+        if (user) {
+            const hashedPw = user.password;
+			const plaintextPw = credentials.password
+			const result = await bcrypt.compare(plaintextPw, hashedPw);
+
+            if (result) {
+				return User.makePublicUser(user);
+			}
+        }
 
         // if any of this goes wrong, thrown an error
-
         throw new UnauthorizedError("Invalid email/password combo")
     }
 
+
+    // register
     static async register(credentials) {
+
         // user should submit their "email", "password", "firstName", "lastName", "location", "date"
         // if any fields are missing, throw an error
         const requiredFields = ["email", "password", "firstName", "lastName", "location", "date"];
@@ -62,8 +94,9 @@ class User {
 
         // return user
         const user = results.rows[0];
-		return user; 
+		return User.makePublicUser(user); 
     }
+
 
     //Fetch user by email
     static async fetchUserByEmail(email) {
