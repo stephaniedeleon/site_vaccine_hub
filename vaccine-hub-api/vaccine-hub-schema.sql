@@ -1,3 +1,4 @@
+-- Creates table in the database
 CREATE TABLE users (
     id SERIAL PRIMARY KEY,
     email TEXT UNIQUE NOT NULL CHECK (POSITION('@' IN email) > 1),

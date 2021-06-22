@@ -1,3 +1,5 @@
+-- Creates the database
+
 \echo 'Delete and recereate vaccine_hub database?'
 \prompt 'Return for yes or control-C to cancel > ' answer
 
