@@ -1,6 +1,7 @@
 const express = require("express");
 const morgan = require("morgan");
 const cors = require("cors");
+const { PORT } = require("./config");
 
 const { NotFoundError } = require("./utils/errors")
 
@@ -31,8 +32,6 @@ app.use((err, req, res, next) => {
 });
 
 
-const port = 3001;
-
-app.listen(port, () => {
-    console.log(`🚀 Server listening on port ` + port);
+app.listen(PORT, () => {
+    console.log(`🚀 Server listening on port ` + PORT);
 });
